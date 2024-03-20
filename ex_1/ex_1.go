@@ -15,6 +15,8 @@ func (h *Human) PrintName() {
 	fmt.Println(h.Name)
 }
 
+// В структуру Action встраиваем структуру Human
+
 type Action struct {
 	Human
 }
@@ -24,8 +26,13 @@ func (a *Action) Eat() {
 }
 
 func main() {
+	// Инициализируем структуру с вложенной в нее структурой
 	Bob := Action{Human{"Bob", 22}}
+
+	// Вызываем методы принадлежащие к стуктуре Human
 	Bob.PrintAge()
 	Bob.PrintName()
+
+	// Вызываем метод принадлежащий к структуре Action
 	Bob.Eat()
 }
