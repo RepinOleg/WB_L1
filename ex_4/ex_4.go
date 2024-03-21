@@ -40,7 +40,7 @@ func main() {
 		close(ch)
 	}()
 
-	// Читаем в канал
+	// Читаем из канала
 	for {
 		var input string
 		fmt.Println("Enter a string")
