@@ -26,6 +26,6 @@ func binarySearch(numbers []int, target int) int {
 }
 
 func main() {
-	test := []int{1, 2, 3, 4, 5, 6, 22}
-	fmt.Println(binarySearch(test, 4))
+	test := []int{1, 3, 4, 6, 8, 10, 55, 56, 59, 70, 79, 81, 91, 10001}
+	fmt.Println(binarySearch(test, 55))
 }

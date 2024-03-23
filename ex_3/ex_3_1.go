@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-func squaring2(number int, ch chan int, wg *sync.WaitGroup) {
+func squaring2(number int, ch chan<- int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	// Пишем в канал квадраты чисел
 	ch <- number * number
@@ -20,21 +20,22 @@ func main() {
 
 	for _, number := range numbers {
 		wg.Add(1)
-		go func(number int) {
-			squaring2(number, ch, &wg)
-		}(number)
+		go squaring2(number, ch, &wg)
 	}
 
 	// запускаем поток в котором ждем завершения всех горутин после чего закрываем канал
 	go func() {
+		fmt.Println("Waiting...")
 		wg.Wait()
 		close(ch)
 	}()
 
-	// считываем все данные из канала
+	fmt.Println("Reading...")
+	// считываем все данные из канала пока он открыт
 	var sum int
 	for number := range ch {
 		sum += number
 	}
+
 	fmt.Println(sum)
 }
