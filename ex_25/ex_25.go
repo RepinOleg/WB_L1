@@ -2,6 +2,8 @@ package main
 
 import "time"
 
+// Реализовать собственную функцию sleep.
+
 func Sleep(t time.Duration) {
 	select {
 	// Функция time.After возвращает канал и пишет в него спустя t времени

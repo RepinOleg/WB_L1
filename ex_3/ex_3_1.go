@@ -12,7 +12,7 @@ func squaring2(number int, ch chan<- int, wg *sync.WaitGroup) {
 }
 
 func main() {
-	numbers := []int{2, 4, 6, 8, 10}
+	numbers := []int{1, 1, 1, 2, 2, 4, 6, 8, 10}
 	var wg sync.WaitGroup
 
 	// создаем канал
@@ -25,15 +25,15 @@ func main() {
 
 	// запускаем поток в котором ждем завершения всех горутин после чего закрываем канал
 	go func() {
-		fmt.Println("Waiting...")
 		wg.Wait()
 		close(ch)
+		fmt.Println("Channel closed")
 	}()
 
-	fmt.Println("Reading...")
 	// считываем все данные из канала пока он открыт
 	var sum int
 	for number := range ch {
+		fmt.Println("reading")
 		sum += number
 	}
 

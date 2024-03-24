@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// Удалить i-ый элемент из слайса.
+
 func main() {
 	test := []int{1, 2, 3, 4, 5}
 	res, _ := deleteElem(test, 2)

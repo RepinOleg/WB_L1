@@ -5,6 +5,8 @@ import (
 	"math/rand"
 )
 
+// Реализовать быструю сортировку массива (quicksort) встроенными методами языка.
+
 func main() {
 	arr := []int{1, 232, 1, 5, 1, 4, 1, 1}
 	fmt.Println(QuickSort(arr))

@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// Реализовать пересечение двух неупорядоченных множеств.
+
 func main() {
 	// множество в языке golang
 	set1 := map[interface{}]bool{

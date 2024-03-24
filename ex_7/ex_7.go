@@ -6,7 +6,9 @@ import (
 	"sync"
 )
 
-const amountNumbers = 10
+// Реализовать конкурентную запись данных в map.
+
+const amountNumbers = 20
 
 func main() {
 	// создаем мапу, она хранит число и его наличие

@@ -7,46 +7,40 @@ import (
 	"time"
 )
 
-// флаг для третьей горутины
+// Реализовать все возможные способы остановки выполнения горутины.
+
 var stopFlag bool
 
 func main() {
+	var wg sync.WaitGroup
 	// вызов функции с первой горутиной
-	closeGo1()
-
-	// создание контекста с функцией отмены для второй горутины
-	ctx, cancel := context.WithCancel(context.Background())
+	closeGo1(&wg)
 
 	// вызов функции со второй горутиной
-	closeGo2(ctx)
-
-	time.Sleep(3 * time.Second)
-	// Вызов функции прекращения контекста
-	cancel()
-	time.Sleep(3 * time.Second)
+	closeGo2(&wg)
 
 	// создание wg для ожидания пока третья горутина завершится
-	var wg sync.WaitGroup
-	wg.Add(1)
 
 	// Вызов функции с третьей горутиной
 	closeGo3(&wg)
-
-	time.Sleep(3 * time.Second)
 	// устанавливаем флаг в true для того чтобы третья горутина вышла из цикла
 	stopFlag = true
 	wg.Wait()
 
 }
-func closeGo1() {
+
+// Остановка с помощью канала
+func closeGo1(wg *sync.WaitGroup) {
 	// Канал который будем закрывать чтобы остановить горутину
 	quit := make(chan bool)
+	wg.Add(1)
 	// запускаем горутину
 	go func() {
+		defer wg.Done()
 		for {
 			select {
 			case <-quit:
-				fmt.Println("Остановка")
+				fmt.Println("Остановка 1 горутины")
 				// когда канал закрылся выходим из функции и горутина останавливается
 				return
 			default:
@@ -56,18 +50,23 @@ func closeGo1() {
 			}
 		}
 	}()
-	time.Sleep(3 * time.Second)
+	time.Sleep(time.Second)
 	// закрываем канал
 	quit <- true
 }
 
-func closeGo2(ctx context.Context) {
+// Остановка с помощью контекста
+func closeGo2(wg *sync.WaitGroup) {
+	// создание контекста с функцией отмены для второй горутины
+	ctx, cancel := context.WithCancel(context.Background())
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		for {
 			select {
 			// Когда контекст зваершился останавливаем горутину
 			case <-ctx.Done():
-				fmt.Println("Остановка")
+				fmt.Println("Остановка 2 горутины")
 				return
 			default:
 				fmt.Println("Горутина №2 работает")
@@ -75,15 +74,20 @@ func closeGo2(ctx context.Context) {
 			}
 		}
 	}()
+	time.Sleep(time.Second)
+	// Вызов функции прекращения контекста
+	cancel()
 }
 
+// остановка с помощью глобальной переменной
 func closeGo3(wg *sync.WaitGroup) {
+	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		for {
-			// когда флаг останавливаем горутину
+			// когда флаг = true останавливаем горутину
 			if stopFlag {
-				fmt.Println("Остановка")
+				fmt.Println("Остановка 3 горутины")
 				return
 			}
 
@@ -91,4 +95,5 @@ func closeGo3(wg *sync.WaitGroup) {
 			time.Sleep(time.Second)
 		}
 	}()
+	time.Sleep(time.Second)
 }

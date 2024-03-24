@@ -1,15 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
+
+// К каким негативным последствиям может привести данный фрагмент кода,
+// и как это исправить? Приведите корректный пример реализации.
+//
+//
+//	var justString string
+//	func someFunc() {
+//  	v := createHugeString(1 << 10)
+//  	justString = v[:100]
+//	}
+//
+//	func main() {
+//  	someFunc()
+//	}
 
 var justString string
 
 func someFunc() {
 	v := createHugeString(1 << 10)
-
 	// Если оставить такую запись, то после выхода из этой функции
 	// в памяти будет храниться огромная строка которая нам не нужна
 	// justString = v[:100]
@@ -21,7 +33,6 @@ func someFunc() {
 
 func main() {
 	someFunc()
-	fmt.Println(len(justString))
 }
 
 func createHugeString(size int) string {

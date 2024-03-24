@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// Реализовать паттерн «адаптер» на любом примере.
+
 type MediaPlayer interface {
 	Play(audioType, fileName string) error // Интерфейс MediaPlayer определяет метод Play для воспроизведения медиафайла определенного типа.
 }

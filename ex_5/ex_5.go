@@ -6,21 +6,23 @@ import (
 	"time"
 )
 
+// Разработать программу, которая будет последовательно отправлять значения в канал,
+// а с другой стороны канала — читать.
+// По истечению N секунд программа должна завершаться
+// флаг для третьей горутины
+
 func writeNumbers(ch chan<- int, N int) {
 	// Функция After возвращает канал в который придет значение после истечения времени
 	finish := time.After(time.Duration(N) * time.Second)
 
 	for {
-		// Рандомим число
-		numb := rand.Int()
 		select {
 		// Если в канал finish пришло значение, то закрываем канал с данными и выходим из функции
 		case <-finish:
 			close(ch)
+			fmt.Println("channel closed")
 			return
-		default:
-			// Иначе пишем число в канал
-			ch <- numb
+		case ch <- rand.Int():
 		}
 	}
 }
@@ -28,12 +30,11 @@ func writeNumbers(ch chan<- int, N int) {
 func main() {
 	ch := make(chan int)
 	//N количество секунд
-	var N = 2
+	var N = 1
 	//Запуск потока
 	go writeNumbers(ch, N)
 	// чтение из канала
 	for numb := range ch {
 		fmt.Println(numb)
 	}
-
 }
